@@ -1,4 +1,4 @@
 HEADERS += \
-    $$PWD/src/qref.h
+    $$PWD/src/qbox.h
 
 INCLUDEPATH += $$PWD/src/
