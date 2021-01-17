@@ -1,5 +1,5 @@
-#ifndef QREF_H
-#define QREF_H
+#ifndef QBOX_H
+#define QBOX_H
 
 #include <functional>
 #include <memory>
@@ -108,4 +108,4 @@ public:
 
 
 
-#endif // QREF_H
+#endif // QBOX_H
