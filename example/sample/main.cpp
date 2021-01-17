@@ -14,39 +14,39 @@ struct A
 };
 
 
-/* compiled, but is not useful becouse inner ref types do not have (const QRef &) constructor
- * QRef<A>::shared s = lvalue_ref;
- * QRef<A>::owner o = lvalue_ref;
- * QRef<A>::not_null nn = lvalue_ref; */
+/* compiled, but is not useful becouse inner ref types do not have (const QBox &) constructor
+ * QBox<A>::shared s = lvalue_ref;
+ * QBox<A>::owner o = lvalue_ref;
+ * QBox<A>::not_null nn = lvalue_ref; */
 void not_compile(const QBox<A> & lvalue_ref) {
 
 }
 
 
-/* correct compiled becouse shared have QRef & constructor
- * QRef<A> ref = new A();
+/* correct compiled becouse shared have QBox & constructor
+ * QBox<A> ref = new A();
  * compile(ref);            */
 void compile(QBox<A> & lvalue_ref) {
     QBox<A>::shared s = lvalue_ref; //
-    qDebug()<< "non const lvalue reference QRef";
+    qDebug()<< "non const lvalue reference to QBox";
 }
 
 
-/* compile(QRef<A>(new A()));
+/* compile(QBox<A>(new A()));
  * compile(new A());            */
 void compile(QBox<A> && rvalue_ref) {
     QBox<A>::shared s = rvalue_ref; // correct compilled
-//    QRef<A>::owner o = rvalue_ref; // throw exception std::invalid_argument("non unique reference") becouse exists any shared
-    qDebug()<< "rvalue reference QRef";
+//    QBox<A>::owner o = rvalue_ref; // throw exception std::invalid_argument("non unique reference") becouse exists any shared
+    qDebug()<< "rvalue reference QBox";
 }
 
-void non_null(QBox<A>::not_null n_ref)
+void not_null(QBox<A>::not_null n_ref)
 {
     qDebug() << "non null" << n_ref->digit;
 }
 
 /* use case:
- * QRef<A> ref = new A();
+ * QBox<A> ref = new A();
  * shared(ref); - make shared reference to use in this function
  * own(ref); - make owned reference to use in this function and delete this after execution */
 void shared(QBox<A>::shared s_ref)
@@ -63,7 +63,7 @@ void own(QBox<A>::owner u_ref)
 
 
 /* use case:
- * test(new A()); - create owner QRef and using this how own this */
+ * test(new A()); - create owner QBox and using this how own this */
 void test(QBox<A>::owner f)
 {
     qDebug()<<"test"<<f->digit;
@@ -86,8 +86,9 @@ int main(int argc, char *argv[])
     own(ref);
     own(QBox<A>(new A()));
     shared(QBox<A>(new A()));
-    non_null(QBox<A>(new A()));
+    not_null(QBox<A>(new A()));
 
+    ref = new A();
     compile(ref);
 
     // equial:
@@ -97,7 +98,9 @@ int main(int argc, char *argv[])
     test(new A());
 
     try {
-        non_null(nullptr);
+        own(ref);
+        // ref == nullptr becouse ref was moved to own()
+        not_null(ref); // equial not_null(nullptr)
     } catch(QBoxException & e) {
         qDebug()<<e.what(); // null in not null container
     }

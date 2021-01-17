@@ -63,7 +63,7 @@ public:
             : base(nullptr)
         {
             if(!r.val.unique())
-                throw QBoxException("QRef: non unique reference in owner container");
+                throw QBoxException("QBox: non unique reference in owner container");
 
             this->swap(r.val);
         }
@@ -72,7 +72,7 @@ public:
             : base(nullptr)
         {
             if(!r.val.unique())
-                throw QBoxException("QRef: non unique reference in owner container");
+                throw QBoxException("QBox: non unique reference in owner container");
 
             this->swap(r.val);
         }
@@ -87,21 +87,21 @@ public:
             : base (t)
         {
             if(this->get() == nullptr)
-                throw QBoxException("QRef: null reference in not null container");
+                throw QBoxException("QBox: null reference in not null container");
         }
 
         not_null(QBox & r)
             : base (r.val)
         {
             if(this->get() == nullptr)
-                throw QBoxException("QRef: null reference in not null container");
+                throw QBoxException("QBox: null reference in not null container");
         }
 
         not_null(QBox && r)
             : base (std::move(r.val))
         {
             if(this->get() == nullptr)
-                throw QBoxException("QRef: null reference in not null container");
+                throw QBoxException("QBox: null reference in not null container");
         }
     };
 };
