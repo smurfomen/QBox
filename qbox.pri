@@ -1,4 +1,7 @@
 HEADERS += \
     $$PWD/src/qbox.h
 
-INCLUDEPATH += $$PWD/src/
+INCLUDEPATH += $$PWD
+
+DISTFILES += \
+        $$PWD/QBox
